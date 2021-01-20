@@ -241,10 +241,14 @@ http_archive(
 # You may run setup_android.sh to install Android SDK and NDK.
 android_ndk_repository(
     name = "androidndk",
+    path = "/home/azimuth/Android/Sdk//android-ndk-r18b",
+    api_level=21,
 )
 
 android_sdk_repository(
     name = "androidsdk",
+    path = "/home/azimuth/Android/Sdk",
+#    api_level=27,
 )
 
 # iOS basic build deps.

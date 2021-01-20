@@ -21,6 +21,7 @@ cc_library(
     deps = [
         "//mediapipe/calculators/image:luminance_calculator",
         "//mediapipe/calculators/image:sobel_edges_calculator",
+        "//mediapipe/calculators/util:labels_to_render_data_calculator"
     ],
 )
 

@@ -47,7 +47,7 @@
 
 namespace {
 constexpr int kNumInputTensorsWithAnchors = 3;
-constexpr int kNumCoordsPerBox = 4;
+constexpr int kNumCoordsPerBox = 5;
 
 bool CanUseGpu() {
 #if !defined(MEDIAPIPE_DISABLE_GL_COMPUTE) || MEDIAPIPE_METAL_ENABLED

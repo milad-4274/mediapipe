@@ -8,6 +8,7 @@
 
   <!-- For using the camera -->
   <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-feature android:name="android.hardware.camera" />
 
   <application
@@ -33,5 +34,6 @@
       <meta-data android:name="outputVideoStreamName" android:value="${outputVideoStreamName}"/>
       <meta-data android:name="flipFramesVertically" android:value="${flipFramesVertically}"/>
       <meta-data android:name="converterNumBuffers" android:value="${converterNumBuffers}"/>
+
   </application>
 </manifest>

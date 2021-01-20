@@ -28,7 +28,7 @@ cc_library(
         "//mediapipe/calculators/video:opencv_video_decoder_calculator",
         "//mediapipe/calculators/video:opencv_video_encoder_calculator",
         "//mediapipe/graphs/face_mesh/subgraphs:face_renderer_cpu",
-        "//mediapipe/modules/face_landmark:face_landmark_front_cpu",
+        "//mediapipe/modules/face_landmark_milad:face_landmark_front_cpu",
     ],
 )
 
@@ -38,7 +38,7 @@ cc_library(
         "//mediapipe/calculators/core:constant_side_packet_calculator",
         "//mediapipe/calculators/core:flow_limiter_calculator",
         "//mediapipe/graphs/face_mesh/subgraphs:face_renderer_cpu",
-        "//mediapipe/modules/face_landmark:face_landmark_front_cpu",
+        "//mediapipe/modules/face_landmark_milad:face_landmark_front_cpu",
     ],
 )
 
@@ -48,7 +48,7 @@ cc_library(
         "//mediapipe/calculators/core:constant_side_packet_calculator",
         "//mediapipe/calculators/core:flow_limiter_calculator",
         "//mediapipe/graphs/face_mesh/subgraphs:face_renderer_gpu",
-        "//mediapipe/modules/face_landmark:face_landmark_front_gpu",
+        "//mediapipe/modules/face_landmark_milad:face_landmark_front_gpu",
     ],
 )
 
@@ -57,7 +57,7 @@ cc_library(
     deps = [
         "//mediapipe/calculators/core:flow_limiter_calculator",
         "//mediapipe/graphs/face_mesh/subgraphs:face_renderer_gpu",
-        "//mediapipe/modules/face_landmark:face_landmark_front_gpu",
+        "//mediapipe/modules/face_landmark_milad:face_landmark_front_gpu",
     ],
 )
 

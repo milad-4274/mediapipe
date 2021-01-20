@@ -90,10 +90,10 @@ mediapipe::Status FaceLandmarksToRenderDataCalculator::Open(
   cc->SetOffset(TimestampDiff(0));
   options_ = cc->Options<mediapipe::LandmarksToRenderDataCalculatorOptions>();
 
-  for (int i = 0; i < kNumFaceLandmarkConnections; ++i) {
-    landmark_connections_.push_back(kFaceLandmarkConnections[i * 2]);
-    landmark_connections_.push_back(kFaceLandmarkConnections[i * 2 + 1]);
-  }
+  // for (int i = 0; i < kNumFaceLandmarkConnections; ++i) {
+  //   landmark_connections_.push_back(kFaceLandmarkConnections[i * 2]);
+  //   landmark_connections_.push_back(kFaceLandmarkConnections[i * 2 + 1]);
+  // }
 
   return mediapipe::OkStatus();
 }
