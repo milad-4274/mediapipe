@@ -47,7 +47,7 @@
 
 namespace {
 constexpr int kNumInputTensorsWithAnchors = 3;
-constexpr int kNumCoordsPerBox = 5;
+constexpr int kNumCoordsPerBox = 4;
 
 bool CanUseGpu() {
 #if !defined(MEDIAPIPE_DISABLE_GL_COMPUTE) || MEDIAPIPE_METAL_ENABLED
@@ -701,23 +701,17 @@ mediapipe::Status TensorsToDetectionsCalculator::GpuInit(
     // A shader to decode detection boxes.
     const std::string decode_src = absl::Substitute(
         R"( #version 310 es
-
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
-
 layout(location = 0) uniform vec4 scale;
-
 layout(std430, binding = 0) writeonly buffer Output {
   float data[];
 } boxes;
-
 layout(std430, binding = 1) readonly buffer Input0 {
   float data[];
 } raw_boxes;
-
 layout(std430, binding = 2) readonly buffer Input1 {
   float data[];
 } raw_anchors;
-
 uint num_coords = uint($0);
 int reverse_output_order = int($1);
 int apply_exponential = int($2);
@@ -725,14 +719,11 @@ int box_coord_offset = int($3);
 int num_keypoints = int($4);
 int keypt_coord_offset = int($5);
 int num_values_per_keypt = int($6);
-
 void main() {
   uint g_idx = gl_GlobalInvocationID.x;  // box index
   uint box_offset = g_idx * num_coords + uint(box_coord_offset);
   uint anchor_offset = g_idx * uint(4);  // check kNumCoordsPerBox
-
   float y_center, x_center, h, w;
-
   if (reverse_output_order == int(0)) {
     y_center = raw_boxes.data[box_offset + uint(0)];
     x_center = raw_boxes.data[box_offset + uint(1)];
@@ -744,15 +735,12 @@ void main() {
     w = raw_boxes.data[box_offset + uint(2)];
     h = raw_boxes.data[box_offset + uint(3)];
   }
-
   float anchor_yc = raw_anchors.data[anchor_offset + uint(0)];
   float anchor_xc = raw_anchors.data[anchor_offset + uint(1)];
   float anchor_h  = raw_anchors.data[anchor_offset + uint(2)];
   float anchor_w  = raw_anchors.data[anchor_offset + uint(3)];
-
   x_center = x_center / scale.x * anchor_w + anchor_xc;
   y_center = y_center / scale.y * anchor_h + anchor_yc;
-
   if (apply_exponential == int(1)) {
     h = exp(h / scale.w) * anchor_h;
     w = exp(w / scale.z) * anchor_w;
@@ -760,17 +748,14 @@ void main() {
     h = (h / scale.w) * anchor_h;
     w = (w / scale.z) * anchor_w;
   }
-
   float ymin = y_center - h / 2.0;
   float xmin = x_center - w / 2.0;
   float ymax = y_center + h / 2.0;
   float xmax = x_center + w / 2.0;
-
   boxes.data[box_offset + uint(0)] = ymin;
   boxes.data[box_offset + uint(1)] = xmin;
   boxes.data[box_offset + uint(2)] = ymax;
   boxes.data[box_offset + uint(3)] = xmax;
-
   if (num_keypoints > int(0)){
     for (int k = 0; k < num_keypoints; ++k) {
       int kp_offset =
@@ -822,27 +807,20 @@ void main() {
     // A shader to score detection boxes.
     const std::string score_src = absl::Substitute(
         R"( #version 310 es
-
 layout(local_size_x = 1, local_size_y = $0, local_size_z = 1) in;
-
 #define FLT_MAX 1.0e+37
-
 shared float local_scores[$0];
-
 layout(std430, binding = 0) writeonly buffer Output {
   float data[];
 } scored_boxes;
-
 layout(std430, binding = 1) readonly buffer Input0 {
   float data[];
 } raw_scores;
-
 uint num_classes = uint($0);
 int apply_sigmoid = int($1);
 int apply_clipping_thresh = int($2);
 float clipping_thresh = float($3);
 int ignore_class_0 = int($4);
-
 float optional_sigmoid(float x) {
   if (apply_sigmoid == int(0)) return x;
   if (apply_clipping_thresh == int(1)) {
@@ -851,17 +829,14 @@ float optional_sigmoid(float x) {
   x = 1.0 / (1.0 + exp(-x));
   return x;
 }
-
 void main() {
   uint g_idx = gl_GlobalInvocationID.x;   // box idx
   uint s_idx =  gl_LocalInvocationID.y;   // score/class idx
-
   // load all scores into shared memory
   float score = raw_scores.data[g_idx * num_classes + s_idx];
   local_scores[s_idx] = optional_sigmoid(score);
   memoryBarrierShared();
   barrier();
-
   // find max score in shared memory
   if (s_idx == uint(0)) {
     float max_score = -FLT_MAX;
@@ -920,15 +895,12 @@ void main() {
   std::string decode_src = absl::Substitute(
       R"(
 #include <metal_stdlib>
-
 using namespace metal;
-
 kernel void decodeKernel(
     device float*                   boxes       [[ buffer(0) ]],
     device float*                   raw_boxes   [[ buffer(1) ]],
     device float*                   raw_anchors [[ buffer(2) ]],
     uint2                           gid         [[ thread_position_in_grid ]]) {
-
   uint num_coords = uint($0);
   int reverse_output_order = int($1);
   int apply_exponential = int($2);
@@ -952,9 +924,7 @@ kernel void decodeKernel(
   uint g_idx = gid.x;
   uint box_offset = g_idx * num_coords + uint(box_coord_offset);
   uint anchor_offset = g_idx * uint(4);  // check kNumCoordsPerBox
-
   float y_center, x_center, h, w;
-
   if (reverse_output_order == int(0)) {
     y_center = raw_boxes[box_offset + uint(0)];
     x_center = raw_boxes[box_offset + uint(1)];
@@ -966,15 +936,12 @@ kernel void decodeKernel(
     w = raw_boxes[box_offset + uint(2)];
     h = raw_boxes[box_offset + uint(3)];
   }
-
   float anchor_yc = raw_anchors[anchor_offset + uint(0)];
   float anchor_xc = raw_anchors[anchor_offset + uint(1)];
   float anchor_h  = raw_anchors[anchor_offset + uint(2)];
   float anchor_w  = raw_anchors[anchor_offset + uint(3)];
-
   x_center = x_center / scale.x * anchor_w + anchor_xc;
   y_center = y_center / scale.y * anchor_h + anchor_yc;
-
   if (apply_exponential == int(1)) {
     h = exp(h / scale.w) * anchor_h;
     w = exp(w / scale.z) * anchor_w;
@@ -982,17 +949,14 @@ kernel void decodeKernel(
     h = (h / scale.w) * anchor_h;
     w = (w / scale.z) * anchor_w;
   }
-
   float ymin = y_center - h / 2.0;
   float xmin = x_center - w / 2.0;
   float ymax = y_center + h / 2.0;
   float xmax = x_center + w / 2.0;
-
   boxes[box_offset + uint(0)] = ymin;
   boxes[box_offset + uint(1)] = xmin;
   boxes[box_offset + uint(2)] = ymax;
   boxes[box_offset + uint(3)] = xmax;
-
   if (num_keypoints > int(0)){
     for (int k = 0; k < num_keypoints; ++k) {
       int kp_offset =
@@ -1042,9 +1006,7 @@ kernel void decodeKernel(
   const std::string score_src = absl::Substitute(
       R"(
 #include <metal_stdlib>
-
 using namespace metal;
-
 float optional_sigmoid(float x) {
   int apply_sigmoid = int($1);
   int apply_clipping_thresh = int($2);
@@ -1056,28 +1018,23 @@ float optional_sigmoid(float x) {
   x = 1.0 / (1.0 + exp(-x));
   return x;
 }
-
 kernel void scoreKernel(
     device float*             scored_boxes [[ buffer(0) ]],
     device float*             raw_scores   [[ buffer(1) ]],
     uint2                     tid          [[ thread_position_in_threadgroup ]],
     uint2                     gid          [[ thread_position_in_grid ]]) {
-
   uint num_classes = uint($0);
   int apply_sigmoid = int($1);
   int apply_clipping_thresh = int($2);
   float clipping_thresh = float($3);
   int ignore_class_0 = int($4);
-
   uint g_idx = gid.x;   // box idx
   uint s_idx = tid.y;   // score/class idx
-
   // load all scores into shared memory
   threadgroup float local_scores[$0];
   float score = raw_scores[g_idx * num_classes + s_idx];
   local_scores[s_idx] = optional_sigmoid(score);
   threadgroup_barrier(mem_flags::mem_threadgroup);
-
   // find max score in shared memory
   if (s_idx == uint(0)) {
     float max_score = -FLT_MAX;

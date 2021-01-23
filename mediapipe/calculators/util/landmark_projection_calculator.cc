@@ -61,6 +61,10 @@ constexpr char kRectTag[] = "NORM_RECT";
 class LandmarkProjectionCalculator : public CalculatorBase {
  public:
   static mediapipe::Status GetContract(CalculatorContract* cc) {
+
+    LOG(INFO) << "Im here to landmark projection. here you are";
+
+
     RET_CHECK(cc->Inputs().HasTag(kLandmarksTag) &&
               cc->Inputs().HasTag(kRectTag))
         << "Missing one or more input streams.";
@@ -113,9 +117,9 @@ class LandmarkProjectionCalculator : public CalculatorBase {
       for (int i = 0; i < input_landmarks.landmark_size(); ++i) {
         const NormalizedLandmark& landmark = input_landmarks.landmark(i);
         NormalizedLandmark* new_landmark = output_landmarks.add_landmark();
-
         const float x = landmark.x() - 0.5f;
         const float y = landmark.y() - 0.5f;
+        LOG(INFO) << landmark.x() << landmark.y() << "input packet of landark projection";
         const float angle =
             options.ignore_rotation() ? 0 : input_rect.rotation();
         float new_x = std::cos(angle) * x - std::sin(angle) * y;

@@ -1,6 +1,6 @@
-#licenses(["notice"])
+licenses(["notice"])
 
-# package(default_visibility = ["//mediapipe/examples:__subpackages__"])
+package(default_visibility = ["//mediapipe/examples:__subpackages__"])
 
 # proto_library(
 #     name = "autoflip_messages_proto",

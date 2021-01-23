@@ -34,6 +34,11 @@ mediapipe::Status PrintHelloWorld() {
     node {
       calculator: "PassThroughCalculator"
       input_stream: "out1"
+      output_stream: "out2"
+    }
+    node {
+      calculator: "PassThroughCalculator"
+      input_stream: "out2"
       output_stream: "out"
     }
   )");
@@ -54,6 +59,8 @@ mediapipe::Status PrintHelloWorld() {
   // Get the output packets std::string.
   while (poller.Next(&packet)) {
     LOG(INFO) << packet.Get<std::string>();
+    LOG(INFO) << "miladam";
+    LOG(WARNING) << "milad warning";
   }
   return graph.WaitUntilDone();
 }
