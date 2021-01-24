@@ -114,6 +114,7 @@ mediapipe::Status RectTransformationCalculator::Open(CalculatorContext* cc) {
 }
 
 mediapipe::Status RectTransformationCalculator::Process(CalculatorContext* cc) {
+  LOG(INFO) << "RectTransformationCalculator process unit"; 
   if (cc->Inputs().HasTag(kRectTag) && !cc->Inputs().Tag(kRectTag).IsEmpty()) {
     auto rect = cc->Inputs().Tag(kRectTag).Get<Rect>();
     TransformRect(&rect);

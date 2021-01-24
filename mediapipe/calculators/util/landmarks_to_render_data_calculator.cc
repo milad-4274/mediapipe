@@ -217,6 +217,8 @@ mediapipe::Status LandmarksToRenderDataCalculator::Open(CalculatorContext* cc) {
 
 mediapipe::Status LandmarksToRenderDataCalculator::Process(
     CalculatorContext* cc) {
+  
+  LOG(INFO) << "im here to process landmarks";
   // Check that landmarks are not empty and skip rendering if so.
   // Don't emit an empty packet for this timestamp.
   if (cc->Inputs().HasTag(kLandmarksTag) &&

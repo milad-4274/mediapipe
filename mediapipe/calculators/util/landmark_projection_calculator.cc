@@ -119,7 +119,7 @@ class LandmarkProjectionCalculator : public CalculatorBase {
         NormalizedLandmark* new_landmark = output_landmarks.add_landmark();
         const float x = landmark.x() - 0.5f;
         const float y = landmark.y() - 0.5f;
-        LOG(INFO) << landmark.x() << landmark.y() << "input packet of landark projection";
+        LOG(INFO) << "x: " << landmark.x() << " y:" << landmark.y() << "input packet of landark projection";
         const float angle =
             options.ignore_rotation() ? 0 : input_rect.rotation();
         float new_x = std::cos(angle) * x - std::sin(angle) * y;

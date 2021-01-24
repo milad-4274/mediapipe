@@ -110,6 +110,7 @@ mediapipe::Status LandmarksToDetectionCalculator::Open(CalculatorContext* cc) {
 
 mediapipe::Status LandmarksToDetectionCalculator::Process(
     CalculatorContext* cc) {
+  LOG(INFO) << "landmark_to_detection_calculator_process_time";
   const auto& landmarks =
       cc->Inputs().Tag(kNormalizedLandmarksTag).Get<NormalizedLandmarkList>();
   RET_CHECK_GT(landmarks.landmark_size(), 0)

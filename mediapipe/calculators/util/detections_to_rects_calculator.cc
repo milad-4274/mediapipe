@@ -196,6 +196,7 @@ mediapipe::Status DetectionsToRectsCalculator::Open(CalculatorContext* cc) {
 }
 
 mediapipe::Status DetectionsToRectsCalculator::Process(CalculatorContext* cc) {
+  LOG(INFO) << "DetectionsToRectsCalculator process unit";
   if (cc->Inputs().HasTag(kDetectionTag) &&
       cc->Inputs().Tag(kDetectionTag).IsEmpty()) {
     return mediapipe::OkStatus();
