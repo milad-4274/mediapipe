@@ -30,7 +30,7 @@ node {
   node_options: {
     [type.googleapis.com/mediapipe.DetectionsToRenderDataCalculatorOptions] {
       thickness: 4.0
-      color { r: 0 g: 255 b: 0 }
+      color { r: 0 g: 255 b: 255 }
     }
   }
 }
@@ -89,8 +89,8 @@ node {
 node {
   calculator: "AnnotationOverlayCalculator"
   input_stream: "IMAGE:input_image"
-  input_stream: "detections_render_data"
+  # input_stream: "detections_render_data"
   input_stream: "VECTOR:0:multi_face_landmarks_render_data"
-  input_stream: "rects_render_data"
+  # input_stream: "rects_render_data"
   output_stream: "IMAGE:output_image"
 }

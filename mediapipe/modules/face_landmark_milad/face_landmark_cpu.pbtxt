@@ -40,7 +40,7 @@ node: {
       output_tensor_height: 160
       output_tensor_float_range {
         min: 0.0
-        max: 1.0
+        max: 255.0
       }
     }
   }

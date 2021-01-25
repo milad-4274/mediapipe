@@ -62,7 +62,7 @@ class LandmarkProjectionCalculator : public CalculatorBase {
  public:
   static mediapipe::Status GetContract(CalculatorContract* cc) {
 
-    LOG(INFO) << "Im here to landmark projection. here you are";
+    // LOG(INFO) << "Im here to landmark projection. here you are";
 
 
     RET_CHECK(cc->Inputs().HasTag(kLandmarksTag) &&
@@ -117,8 +117,10 @@ class LandmarkProjectionCalculator : public CalculatorBase {
       for (int i = 0; i < input_landmarks.landmark_size(); ++i) {
         const NormalizedLandmark& landmark = input_landmarks.landmark(i);
         NormalizedLandmark* new_landmark = output_landmarks.add_landmark();
-        const float x = landmark.x() - 0.5f;
-        const float y = landmark.y() - 0.5f;
+        const float x = landmark.x() -.5f;
+        const float y = landmark.y() -.5f;
+        // const float x = landmark.x();
+        // const float y = landmark.y();
         LOG(INFO) << "x: " << landmark.x() << " y:" << landmark.y() << "input packet of landark projection";
         const float angle =
             options.ignore_rotation() ? 0 : input_rect.rotation();
@@ -127,13 +129,22 @@ class LandmarkProjectionCalculator : public CalculatorBase {
 
         new_x = new_x * input_rect.width() + input_rect.x_center();
         new_y = new_y * input_rect.height() + input_rect.y_center();
-        const float new_z =
-            landmark.z() * input_rect.width();  // Scale Z coordinate as X.
+        // new_x = new_x * input_rect.width();
+        // new_y = new_y * input_rect.height();
+        
+        LOG(INFO) << "landmark_projection_info";
+        LOG(INFO) << "x: " << x << " y: " << y << "\n";
+        LOG(INFO) << "newx: " << new_x << " newy: " << new_y << "\n";
+        LOG(INFO) << "rect width: " << input_rect.width() << " rect height: " << input_rect.height() << "\n";
+        LOG(INFO) << "angle: " << angle << " cos(angle) " << std::cos(angle) << "\n";
+
+        // const float new_z =
+        //     landmark.z() * input_rect.width();  // Scale Z coordinate as X.
 
         *new_landmark = landmark;
         new_landmark->set_x(new_x);
         new_landmark->set_y(new_y);
-        new_landmark->set_z(new_z);
+        // new_landmark->set_z(new_z);
       }
 
       cc->Outputs().Get(output_id).AddPacket(

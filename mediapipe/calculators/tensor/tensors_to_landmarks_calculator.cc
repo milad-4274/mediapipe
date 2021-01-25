@@ -155,7 +155,7 @@ mediapipe::Status TensorsToLandmarksCalculator::Process(CalculatorContext* cc) {
   auto view = input_tensors[0].GetCpuReadView();
   auto raw_landmarks = view.buffer<float>();
 
-  LOG(INFO) << "tensor to landmark row_landmarks" << raw_landmarks;
+  // LOG(INFO) << "tensor to landmark row_landmarks" << raw_landmarks;
 
   LandmarkList output_landmarks;
 
@@ -187,6 +187,8 @@ mediapipe::Status TensorsToLandmarksCalculator::Process(CalculatorContext* cc) {
       landmark->set_presence(ApplyActivation(options_.presence_activation(),
                                              raw_landmarks[offset + 4]));
     }
+    // LOG(INFO) << "x = " << landmark->x() << " y= " << landmark->y() << "new one";
+
   }
 
   // Output normalized landmarks if required.
@@ -195,11 +197,11 @@ mediapipe::Status TensorsToLandmarksCalculator::Process(CalculatorContext* cc) {
     for (int i = 0; i < output_landmarks.landmark_size(); ++i) {
       const Landmark& landmark = output_landmarks.landmark(i);
       NormalizedLandmark* norm_landmark = output_norm_landmarks.add_landmark();
-      norm_landmark->set_x(landmark.x() / options_.input_image_width());
-      norm_landmark->set_y(landmark.y() / options_.input_image_height());
+      norm_landmark->set_x(landmark.x());// options_.input_image_width());
+      norm_landmark->set_y(landmark.y());// options_.input_image_height());
       // Scale Z coordinate as X + allow additional uniform normalization.
-      norm_landmark->set_z(landmark.z() / options_.input_image_width() /
-                           options_.normalize_z());
+      // norm_landmark->set_z(landmark.z());// options_.input_image_width() /
+                          //  options_.normalize_z());
       if (landmark.has_visibility()) {  // Set only if supported in the model.
         norm_landmark->set_visibility(landmark.visibility());
       }
