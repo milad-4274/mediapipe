@@ -54,8 +54,8 @@ node {
   node_options: {
     [type.googleapis.com/mediapipe.LandmarksToRenderDataCalculatorOptions] {
       landmark_color { r: 255 g: 255 b: 0 }
-      connection_color { r: 0 g: 255 b: 0 }
-      thickness: 2
+      connection_color { r: 0 g: 0 b: 0 }
+      thickness: 5
       visualize_landmark_depth: false
     }
   }

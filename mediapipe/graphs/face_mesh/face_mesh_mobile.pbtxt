@@ -33,10 +33,39 @@ node {
   output_stream: "throttled_input_video"
 }
 
+# # Subgraph that detects faces and corresponding landmarks.
+# node {
+#   calculator: "FaceLandmarkFrontGpu"
+#   input_stream: "IMAGE:throttled_input_video"
+#   input_side_packet: "NUM_FACES:num_faces"
+#   output_stream: "LANDMARKS:multi_face_landmarks"
+#   output_stream: "ROIS_FROM_LANDMARKS:face_rects_from_landmarks"
+#   output_stream: "DETECTIONS:face_detections"
+#   output_stream: "ROIS_FROM_DETECTIONS:face_rects_from_detections"
+# }
+
+# # Subgraph that renders face-landmark annotation onto the input image.
+# node {
+#   calculator: "FaceRendererGpu"
+#   input_stream: "IMAGE:throttled_input_video"
+#   input_stream: "LANDMARKS:multi_face_landmarks"
+#   input_stream: "NORM_RECTS:face_rects_from_landmarks"
+#   input_stream: "DETECTIONS:face_detections"
+#   output_stream: "IMAGE:output_video"
+# }
+
+
+node: {
+  calculator: "GpuBufferToImageFrameCalculator"
+  input_stream: "throttled_input_video"
+  output_stream: "input_video_cpu"
+}
+
+
 # Subgraph that detects faces and corresponding landmarks.
 node {
-  calculator: "FaceLandmarkFrontGpu"
-  input_stream: "IMAGE:throttled_input_video"
+  calculator: "FaceLandmarkFrontCpu"
+  input_stream: "IMAGE:input_video_cpu"
   input_side_packet: "NUM_FACES:num_faces"
   output_stream: "LANDMARKS:multi_face_landmarks"
   output_stream: "ROIS_FROM_LANDMARKS:face_rects_from_landmarks"
@@ -46,10 +75,28 @@ node {
 
 # Subgraph that renders face-landmark annotation onto the input image.
 node {
-  calculator: "FaceRendererGpu"
-  input_stream: "IMAGE:throttled_input_video"
+  calculator: "FaceRendererCpu"
+  input_stream: "IMAGE:input_video_cpu"
   input_stream: "LANDMARKS:multi_face_landmarks"
   input_stream: "NORM_RECTS:face_rects_from_landmarks"
   input_stream: "DETECTIONS:face_detections"
-  output_stream: "IMAGE:output_video"
+  output_stream: "IMAGE:output_video_cpu"
 }
+
+node: {
+  calculator: "ImageFrameToGpuBufferCalculator"
+  input_stream: "output_video_cpu"
+  output_stream: "output_video"
+}
+
+# node: {
+#   calculator: "LandmarkToMaskCalculator",
+#   input_stream: "INPUT_IMAGE:output_video_1",
+#   output_stream: "IMAGE_GPU:output_video"
+#   # options: {
+#   #   [mediapipe.LandmarkToMaskCalculatorOptions.ext] {
+#   #     landmark_points: [1,2,3,4,5,1]
+#   #   }
+# }
+
+

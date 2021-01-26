@@ -121,7 +121,7 @@ class LandmarkProjectionCalculator : public CalculatorBase {
         const float y = landmark.y() -.5f;
         // const float x = landmark.x();
         // const float y = landmark.y();
-        LOG(INFO) << "x: " << landmark.x() << " y:" << landmark.y() << "input packet of landark projection";
+        // LOG(INFO) << "x: " << landmark.x() << " y:" << landmark.y() << "input packet of landark projection";
         const float angle =
             options.ignore_rotation() ? 0 : input_rect.rotation();
         float new_x = std::cos(angle) * x - std::sin(angle) * y;
@@ -132,11 +132,11 @@ class LandmarkProjectionCalculator : public CalculatorBase {
         // new_x = new_x * input_rect.width();
         // new_y = new_y * input_rect.height();
         
-        LOG(INFO) << "landmark_projection_info";
-        LOG(INFO) << "x: " << x << " y: " << y << "\n";
-        LOG(INFO) << "newx: " << new_x << " newy: " << new_y << "\n";
-        LOG(INFO) << "rect width: " << input_rect.width() << " rect height: " << input_rect.height() << "\n";
-        LOG(INFO) << "angle: " << angle << " cos(angle) " << std::cos(angle) << "\n";
+        // LOG(INFO) << "landmark_projection_info";
+        // LOG(INFO) << "x: " << x << " y: " << y << "\n";
+        // LOG(INFO) << "newx: " << new_x << " newy: " << new_y << "\n";
+        // LOG(INFO) << "rect width: " << input_rect.width() << " rect height: " << input_rect.height() << "\n";
+        // LOG(INFO) << "angle: " << angle << " cos(angle) " << std::cos(angle) << "\n";
 
         // const float new_z =
         //     landmark.z() * input_rect.width();  // Scale Z coordinate as X.

@@ -61,7 +61,7 @@ public class MainActivity extends com.google.mediapipe.apps.basic.MainActivity {
     viewGroup.addView(effectSwitchingHintView);
 
     // By default, render the glasses effect.
-    isFacepaintEffectSelected = false;
+    isFacepaintEffectSelected = true;
 
     // This callback demonstrates how the output face geometry packet can be obtained and used
     // in an Android app. As an example, the Z-translation component of the face pose transform

@@ -18,11 +18,20 @@ licenses(["notice"])
 
 package(default_visibility = ["//visibility:public"])
 
+# encode_binary_proto(
+#     name = "glasses",
+#     input = "glasses.pbtxt",
+#     message_type = "mediapipe.face_geometry.Mesh3d",
+#     output = "glasses.binarypb",
+#     deps = [
+#         "//mediapipe/modules/face_geometry/protos:mesh_3d_proto",
+#     ],
+# )
 encode_binary_proto(
-    name = "glasses",
-    input = "glasses.pbtxt",
+    name = "lip",
+    input = "lip.pbtxt",
     message_type = "mediapipe.face_geometry.Mesh3d",
-    output = "glasses.binarypb",
+    output = "lip.binarypb",
     deps = [
         "//mediapipe/modules/face_geometry/protos:mesh_3d_proto",
     ],
@@ -32,5 +41,6 @@ encode_binary_proto(
 # OpenCV is unable to read a PNG file preprocessed by the iOS build.
 exports_files([
     "facepaint.pngblob",
-    "glasses.pngblob",
+    # "glasses.pngblob",
+    "lip.pngblob",
 ])

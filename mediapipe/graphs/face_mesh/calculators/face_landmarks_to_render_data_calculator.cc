@@ -28,7 +28,7 @@ namespace mediapipe {
 
 namespace {
 
-constexpr int kNumFaceLandmarkConnections = 0;
+constexpr int kNumFaceLandmarkConnections = 20;
 // Pairs of landmark indices to be rendered with connections.
 constexpr int kFaceLandmarkConnections[] = {
     // Lips.
@@ -37,6 +37,11 @@ constexpr int kFaceLandmarkConnections[] = {
     // 269, 269, 270, 270, 409, 409, 291, 78, 95, 95, 88, 88, 178, 178, 87, 87, 14,
     // 14, 317, 317, 402, 402, 318, 318, 324, 324, 308, 78, 191, 191, 80, 80, 81,
     // 81, 82, 82, 13, 13, 312, 312, 311, 311, 310, 310, 415, 415, 308,
+
+    // peppa lip
+    48, 49, 49, 50, 50, 51, 51, 52, 52, 53, 53, 54, 48, 59, 59, 58,
+    58, 57, 57, 56, 56, 55, 55, 54, 60, 61, 61, 62, 62, 63, 63, 64,
+    60, 67, 67, 66, 66, 65, 65, 64
     // // Left eye.
     // 33, 7, 7, 163, 163, 144, 144, 145, 145, 153, 153, 154, 154, 155, 155, 133,
     // 33, 246, 246, 161, 161, 160, 160, 159, 159, 158, 158, 157, 157, 173, 173,
@@ -89,12 +94,12 @@ REGISTER_CALCULATOR(FaceLandmarksToRenderDataCalculator);
 mediapipe::Status FaceLandmarksToRenderDataCalculator::Open(
     CalculatorContext* cc) {
   cc->SetOffset(TimestampDiff(0));
-  options_ = cc->Options<mediapipe::LandmarksToRenderDataCalculatorOptions>();
+  // options_ = cc->Options<mediapipe::LipToRenderDataCalculatorOptions>();
 
-  // for (int i = 0; i < kNumFaceLandmarkConnections; ++i) {
-  //   landmark_connections_.push_back(kFaceLandmarkConnections[i * 2]);
-  //   landmark_connections_.push_back(kFaceLandmarkConnections[i * 2 + 1]);
-  // }
+  for (int i = 0; i < kNumFaceLandmarkConnections; ++i) {
+    landmark_connections_.push_back(kFaceLandmarkConnections[i * 2]);
+    landmark_connections_.push_back(kFaceLandmarkConnections[i * 2 + 1]);
+  }
 
   return mediapipe::OkStatus();
 }

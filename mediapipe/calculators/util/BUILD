@@ -1135,3 +1135,13 @@ cc_library(
     ],
     alwayslink = 1,
 )
+
+cc_library(
+    name="landmark_to_mask_calculator",
+    srcs=["landmark_to_mask_calculator.cc"],
+    visibility=["//visibility:public"],
+    deps=[
+        "//mediapipe/framework:calculator_framework",
+    ],
+    alwayslink=1
+)

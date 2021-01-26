@@ -140,15 +140,15 @@ mediapipe::Status TensorsToLandmarksCalculator::Process(CalculatorContext* cc) {
 
   const auto& input_tensors = *kInTensors(cc);
   int num_values = input_tensors[0].shape().num_elements();
-  LOG(INFO) << "num_values information";
-  LOG(INFO) << num_values;
-  LOG(INFO) << num_landmarks_;
+  // LOG(INFO) << "num_values information";
+  // LOG(INFO) << num_values;
+  // LOG(INFO) << num_landmarks_;
 
   //num_values -> number of all input tensor (136 for 2d 68 points landmark and 1404 for 3d 468 points landmark)
   //num_lanmdmarks -> number of points (eg 68 or 468)
   const int num_dimensions = num_values / num_landmarks_;
 
-  LOG(INFO) << num_dimensions << "num_dimesions";
+  // LOG(INFO) << num_dimensions << "num_dimesions";
 
   CHECK_GT(num_dimensions, 0) << "num_dimensions is zero? am I a joke for u?";
 
@@ -162,7 +162,7 @@ mediapipe::Status TensorsToLandmarksCalculator::Process(CalculatorContext* cc) {
   for (int ld = 0; ld < num_landmarks_; ++ld) {
     const int offset = ld * num_dimensions;
     Landmark* landmark = output_landmarks.add_landmark();
-    LOG(INFO) << "x = " << raw_landmarks[offset] << " y= " << raw_landmarks[offset+1] << "easy_search";
+    // LOG(INFO) << "x = " << raw_landmarks[offset] << " y= " << raw_landmarks[offset+1] << "easy_search";
     if (flip_horizontally) {
       landmark->set_x(options_.input_image_width() - raw_landmarks[offset]);
     } else {

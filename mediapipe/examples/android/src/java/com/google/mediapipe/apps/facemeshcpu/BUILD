@@ -1,4 +1,4 @@
-# Copyright 2020 The MediaPipe Authors.
+# Copyright 2019 The MediaPipe Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ cc_binary(
     linkshared = 1,
     linkstatic = 1,
     deps = [
-        "//mediapipe/graphs/face_effect:face_effect_gpu_deps",
+        "//mediapipe/graphs/face_mesh:mobile_calculators",
         "//mediapipe/java/com/google/mediapipe/framework/jni:mediapipe_framework_jni",
     ],
 )
@@ -33,27 +33,21 @@ cc_library(
 )
 
 android_binary(
-    name = "faceeffect",
+    name = "facemeshcpu",
     srcs = glob(["*.java"]),
     assets = [
-        "//mediapipe/graphs/face_effect/data:facepaint.pngblob",
-        # "//mediapipe/graphs/face_effect/data:glasses.binarypb",
-        # "//mediapipe/graphs/face_effect/data:glasses.pngblob", 
-        "//mediapipe/graphs/face_effect/data:lip.binarypb",
-        "//mediapipe/graphs/face_effect/data:lip.pngblob",
-        "//mediapipe/graphs/face_effect:face_effect_gpu.binarypb",
+        "//mediapipe/graphs/face_mesh:face_mesh_mobile_gpu.binarypb",
+        "//mediapipe/modules/face_landmark_milad:keypoints.tflite",
         "//mediapipe/modules/face_detection:face_detection_front.tflite",
-        "//mediapipe/modules/face_geometry/data:geometry_pipeline_metadata.binarypb",
-        "//mediapipe/modules/face_landmark:face_landmark.tflite",
     ],
     assets_dir = "",
     manifest = "//mediapipe/examples/android/src/java/com/google/mediapipe/apps/basic:AndroidManifest.xml",
     manifest_values = {
-        "applicationId": "com.google.mediapipe.apps.faceeffect",
-        "appName": "Face Effect",
+        "applicationId": "com.google.mediapipe.apps.facemeshcpu",
+        "appName": "Face Mesh (CPU)",
         "mainActivity": ".MainActivity",
         "cameraFacingFront": "True",
-        "binaryGraphName": "face_effect_gpu.binarypb",
+        "binaryGraphName": "face_mesh_mobile_gpu.binarypb",
         "inputVideoStreamName": "input_video",
         "outputVideoStreamName": "output_video",
         "flipFramesVertically": "True",
@@ -63,8 +57,7 @@ android_binary(
     deps = [
         ":mediapipe_jni_lib",
         "//mediapipe/examples/android/src/java/com/google/mediapipe/apps/basic:basic_lib",
-        "//mediapipe/framework/formats:matrix_data_java_proto_lite",
+        "//mediapipe/framework/formats:landmark_java_proto_lite",
         "//mediapipe/java/com/google/mediapipe/framework:android_framework",
-        "//mediapipe/modules/face_geometry/protos:face_geometry_java_proto_lite",
     ],
 )

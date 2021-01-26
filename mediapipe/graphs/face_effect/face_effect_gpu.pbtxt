@@ -128,8 +128,8 @@ node {
   output_stream: "IMAGE_GPU:glasses_effect_output_video"
   node_options: {
     [type.googleapis.com/mediapipe.FaceGeometryEffectRendererCalculatorOptions] {
-      effect_texture_path: "mediapipe/graphs/face_effect/data/glasses.pngblob"
-      effect_mesh_3d_path: "mediapipe/graphs/face_effect/data/glasses.binarypb"
+      effect_texture_path: "mediapipe/graphs/face_effect/data/lip.pngblob"
+      effect_mesh_3d_path: "mediapipe/graphs/face_effect/data/lip.binarypb"
     }
   }
 }
